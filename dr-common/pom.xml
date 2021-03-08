@@ -22,6 +22,7 @@
         <grpc.version>1.11.0</grpc.version>
         <protobuf.version>3.5.1</protobuf.version>
         <os.detected.classifier>windows-x86_64</os.detected.classifier>
+        <project.build.sourceDirectory>${project.basedir}/proto</project.build.sourceDirectory>
     </properties>
 
     <dependencies>
@@ -60,6 +61,8 @@
                     <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
                     <pluginId>grpc-java</pluginId>
                     <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
+                    <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
+                    <clearOutputDirectory>false</clearOutputDirectory>
                 </configuration>
                 <executions>
                     <execution>
