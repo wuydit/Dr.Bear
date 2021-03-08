@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+
+
+package user;
+
+option java_package = "com.bear.common.dto";
+option java_outer_classname = "UserProto";
+option java_multiple_files = true;

@@ -20,6 +20,7 @@
 
     <modules>
         <module>dr-server</module>
+        <module>dr-common</module>
     </modules>
 
     <properties>
