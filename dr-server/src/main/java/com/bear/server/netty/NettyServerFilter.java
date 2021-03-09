@@ -1,10 +1,13 @@
 package com.bear.server.netty;
 
+import com.bear.common.dto.BaseProto;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
-import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,12 +24,12 @@ public class NettyServerFilter extends ChannelInitializer<SocketChannel> {
     }
 
     @Override
-    protected void initChannel(SocketChannel ch) throws Exception {
+    protected void initChannel(SocketChannel ch){
         ChannelPipeline pipeline = ch.pipeline();
-        // 解码和编码，应和客户端一致
-        //传输的协议 Protobuf
+        pipeline.addLast(new ProtobufVarint32FrameDecoder());
+        pipeline.addLast(new ProtobufDecoder(BaseProto.Base.getDefaultInstance()));
+        pipeline.addLast(new ProtobufVarint32LengthFieldPrepender());
         pipeline.addLast(new ProtobufEncoder());
-        pipeline.addLast("timeout", new IdleStateHandler(60, 0, 0));
         //业务逻辑实现类
         pipeline.addLast("nettyServerHandler", nettyServerHandler);
     }

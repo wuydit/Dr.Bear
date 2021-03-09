@@ -5,11 +5,26 @@ package base;
 option java_package = "com.bear.common.dto";
 option java_outer_classname = "BaseProto";
 
+message Base {
+
+  Head head = 1;
+
+  Body body = 2;
+
+}
+
 //消息头
 message Head {
 
-  repeated int32 action = 1;
+  int32 action = 1;
 
   string token = 2;
+
+}
+
+//消息头
+message Body {
+
+  bytes bodyBytes = 1;
 
 }

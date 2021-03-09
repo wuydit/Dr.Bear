@@ -7,7 +7,14 @@ option java_outer_classname = "UserProto";
 
 message User {
 
-  repeated base.Head head = 1;
+   base.Head head = 1;
 
-  repeated int32 uid = 2;
+   int32 uid = 2;
+}
+
+message UserResult {
+
+   base.Head head = 1;
+
+   int32 result = 2;
 }
