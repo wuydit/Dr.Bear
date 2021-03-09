@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package action;
+
+option java_package = "com.bear.common.dto";
+option java_outer_classname = "ActionProto";
+
+enum Action {
+  //心跳
+  heartbeat     = 0;
+
+  //获取用户信息
+  getUserInfo      = 10001;
+}
+

@@ -1,8 +1,10 @@
 package com.bear.server.netty;
 
 import com.bear.common.dto.BaseProto;
-import com.bear.common.dto.UserProto;
-import com.google.protobuf.InvalidProtocolBufferException;
+import com.bear.server.config.SocketConfig;
+import com.bear.server.control.tcp.BaseSocketControl;
+import com.bear.server.utils.SpringUtils;
+import com.google.protobuf.GeneratedMessageV3;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -40,12 +42,14 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      * 业务逻辑处理
      */
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws InvalidProtocolBufferException {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         BaseProto.Base base = (BaseProto.Base) msg;
-        UserProto.User user = UserProto.User.parseFrom(base.getBody().getBodyBytes());
-        log.info("channelRead :" + base.toString());
-        log.info("channelRead" + user);
-        ctx.writeAndFlush(base);
+        BaseSocketControl baseSocketControl = (BaseSocketControl) SpringUtils.getObject(
+                SocketConfig.BEAN_PREFIX + base.getHead().getAction());
+        GeneratedMessageV3 generatedMessageV3 = baseSocketControl.execute(base.getBody().getBodyBytes());
+        BaseProto.Body body = BaseProto.Body.newBuilder().setBodyBytes(generatedMessageV3.toByteString()).build();
+        BaseProto.Base result = BaseProto.Base.newBuilder().setHead(base.getHead()).setBody(body).build();
+        ctx.writeAndFlush(result);
     }
 
 

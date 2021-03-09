@@ -29,12 +29,13 @@ class UserTests {
 			log.info("启动成功");
 		}
 		SocketChannel socketChannel = (SocketChannel) future.channel();
-		BaseProto.Head head = BaseProto.Head.newBuilder().setAction(1).setToken("123").build();
-		UserProto.User user = UserProto.User.newBuilder().setHead(head).setUid(223).build();
+		BaseProto.Head head = BaseProto.Head.newBuilder().setAction(10001).setToken("123").build();
+		UserProto.User user = UserProto.User.newBuilder().setUid(223).build();
 		BaseProto.Body body = BaseProto.Body.newBuilder().setBodyBytes(user.toByteString()).build();
 		BaseProto.Base base = BaseProto.Base.newBuilder().setHead(head).setBody(body).build();
 		log.info(base.toString());
 		socketChannel.writeAndFlush(base);
+		Thread.sleep(2000);
 		group.shutdownGracefully().syncUninterruptibly();
 	}
 

@@ -1,5 +1,12 @@
 package com.bear.server.netty;
 
+import com.bear.common.dto.ActionProto;
+import com.bear.common.dto.BaseProto;
+import com.bear.common.dto.UserProto;
+import com.bear.server.config.SocketConfig;
+import com.bear.server.control.tcp.BaseSocketControl;
+import com.bear.server.utils.SpringUtils;
+import com.google.protobuf.GeneratedMessageV3;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -40,8 +47,11 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        log.info("channelRead");
-        log.info("channelRead" + msg);
+        BaseProto.Base base = (BaseProto.Base) msg;
+        if(base.getHead().getAction() == ActionProto.Action.getUserInfo_VALUE){
+            UserProto.UserResult result = UserProto.UserResult.parseFrom(base.getBody().getBodyBytes());
+            log.info(result.toString());
+        }
     }
 
     /**
