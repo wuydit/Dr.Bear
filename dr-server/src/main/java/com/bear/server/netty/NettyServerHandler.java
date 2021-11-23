@@ -48,6 +48,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 SocketConfig.BEAN_PREFIX + base.getHead().getAction());
         GeneratedMessageV3 generatedMessageV3 = baseSocketControl.execute(base.getBody());
         BaseProto.Body body = BaseProto.Body.newBuilder().setBodyBytes(generatedMessageV3.toByteString()).build();
+
         BaseProto.Base result = BaseProto.Base.newBuilder().setHead(base.getHead()).setBody(body).build();
         ctx.writeAndFlush(result);
     }
